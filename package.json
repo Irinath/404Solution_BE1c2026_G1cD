@@ -1,0 +1,26 @@
+{
+  "name": "404solution_be1c2026_g1cd",
+  "version": "1.0.0",
+  "description": "Proyecto Integrador Grupo 1 comisión D para BackEnd 1c 2026 IFTP29: 404 Solution",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Irinath/404Solution_BE1c2026_G1cD.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Irinath/404Solution_BE1c2026_G1cD/issues"
+  },
+  "homepage": "https://github.com/Irinath/404Solution_BE1c2026_G1cD#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "nodemon": "^3.1.14",
+    "pug": "^3.0.4"
+  }
+}
