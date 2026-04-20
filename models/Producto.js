@@ -27,7 +27,7 @@ class Producto {
         return this.leer();
     }
 
-    // Crear un nuevo producto (para el formulario)
+    // Crear un nuevo producto
     crear(nuevo) {
         const lista = this.leer();
         const idAValidar = parseInt(nuevo.id);
@@ -53,7 +53,7 @@ class Producto {
         lista.push(productoLimpio);
         this.guardar(lista);
     }
-    
+
     // Buscar un producto por ID
     buscarPorId(id) {
         const lista = this.leer();
@@ -65,19 +65,25 @@ class Producto {
         let lista = this.leer();
         const indice = lista.findIndex(p => p.id == id);
         if (indice !== -1) {
-            // Mantenemos el ID original pero actualizamos el resto
-            lista[indice] = { ...lista[indice], ...datosActualizados, id: parseInt(id) };
+            // Convertimos los datos a los tipos correctos para la comparacion!!!!!!
+            const productoActualizado = {
+                id: parseInt(id),
+                nombre: datosActualizados.nombre,
+                categoria: datosActualizados.categoria || lista[indice].categoria,
+                precio: parseFloat(datosActualizados.precio),
+                stockActual: parseInt(datosActualizados.stockActual),
+                stockMinimo: parseInt(datosActualizados.stockMinimo)
+            };
+            lista[indice] = productoActualizado;
             this.guardar(lista);
         }
     }
-
     // DELETE: Eliminar producto
     eliminar(id) {
         let lista = this.leer();
         lista = lista.filter(p => p.id != id);
         this.guardar(lista);
     }
-
 }
 
 module.exports = new Producto(); // Exportamos una instancia lista para usar

@@ -11,6 +11,12 @@ block contenido
             label Nombre:
             input(type="text" name="nombre" value=producto.nombre required)
         div
+            label Categoría:
+            select(name="categoria" required)
+                option(value="Limpieza Industrial" selected=producto.categoria === "Limpieza Industrial") Limpieza Industrial
+                option(value="Desinfección" selected=producto.categoria === "Desinfección") Desinfección
+                option(value="Seguridad e Higiene" selected=producto.categoria === "Seguridad e Higiene") Seguridad e Higiene
+        div
             label Precio:
             input(type="number" name="precio" step="0.01" value=producto.precio required)
         div
