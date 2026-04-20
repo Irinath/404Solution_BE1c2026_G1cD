@@ -1,18 +1,29 @@
 # TodoStock S.A. - Sistema de Gestión de Inventario
+<<<<<<< HEAD
 
 ## Proyecto: Desarrollo de Sistemas Web (Back End)
 
 **Tecnicatura Superior en Desarrollo de Software**
+=======
+### Proyecto: Desarrollo de Sistemas Web (Back End)
+**Tecnicatura Superior en Desarrollo de Software** 
+>>>>>>> e44228eebc39668316f947f4dc7512355325c51a
 **Instituto de Formación Técnica Superior N° 29 (IFTS 29)**
 
 ---
 
 ## Descripción del Proyecto
+<<<<<<< HEAD
 
 Este proyecto es la **Primer Entrega** de la materia de Desarrollo de Sistemas Web - Back End. Consiste en el desarrollo del Back End diseñado para la distribuidora de productos de limpieza "TodoStock S.A.". La plataforma permite gestionar el ciclo de vida completo de los productos (CRUD), asegurando la persistencia de datos mediante archivos JSON y ofreciendo una interfaz dinámica.
 
 ## Funcionalidades Principales
 
+=======
+Este proyecto es la **Primer Entrega** de la materia de Desarrollo de Sistemas Web - Back End. Consiste en el desarrollo del Back End diseñado para la distribuidora de productos de limpieza "TodoStock S.A.". La plataforma permite gestionar el ciclo de vida completo de los productos (CRUD), asegurando la persistencia de datos mediante archivos JSON y ofreciendo una interfaz dinámica.
+
+## Funcionalidades Principales
+>>>>>>> e44228eebc39668316f947f4dc7512355325c51a
 - **CRUD Completo:** Creación, Lectura, Actualización y Eliminación de productos de limpieza.
 - **Validación de Id:** Control de duplicados en la carga manual de IDs.Esto se aplica, hasta que comencemos a utilizar base de datos.
 - **Control de Stock:** Sistema de alertas visuales (color rojo) para productos por debajo del stock mínimo.
@@ -20,7 +31,10 @@ Este proyecto es la **Primer Entrega** de la materia de Desarrollo de Sistemas W
 - **Interfaz Dinámica:** Motor de plantillas **Pug** con Layouts reutilizables y estilos CSS personalizados.
 
 ## Tecnologías Utilizadas
+<<<<<<< HEAD
 
+=======
+>>>>>>> e44228eebc39668316f947f4dc7512355325c51a
 - **Node.js** (Entorno de ejecución)
 - **Express.js** (Framework web)
 - **Pug** (Motor de plantillas)
