@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "tipoDoc": "CUIT",
+    "nroDoc": "30-222333444-5",
+    "nombre": "Todo Limpio SRL",
+    "email": "todo_limpio@gmail.com",
+    "telefono": "11-4444-5555",
+    "direccion": "Av. Libertador 1000 - CABA",
+    "razonSocial": "Todo Limpio SRL"
+  },
+  {
+    "id": 2,
+    "tipoDoc": "CUIT",
+    "nroDoc": "30-99988877-9",
+    "nombre": "Limpio Lux SA",
+    "email": "limpio_lux@gmail.com",
+    "telefono": "11-4999-9999",
+    "direccion": "Av. Cabildo 2500 - CABA",
+    "razonSocial": "Limpio Lux SA"
+  },
+  {
+    "id": 3,
+    "tipoDoc": "CUIT",
+    "nroDoc": "30-55511166-8",
+    "nombre": "Brillo SRL",
+    "email": "brillo@gmail.com",
+    "telefono": "11-3333-7777",
+    "direccion": "Av. Independencia 3800 - CABA",
+    "razonSocial": "Brillo SRL"
+  },
+  {
+    "id": 4,
+    "tipoDoc": "CUIT",
+    "nroDoc": "30-454545455-4",
+    "nombre": "",
+    "email": "pepito@gmail.com",
+    "telefono": "11-4545-6565",
+    "direccion": "Lola Mora 759 - CABA",
+    "razonSocial": "Pepito El Limpio SA"
+  },
+  {
+    "id": 5,
+    "tipoDoc": "DNI",
+    "nroDoc": "32333444",
+    "nombre": "Lola Mora",
+    "email": "lola@gmail.com",
+    "telefono": "11-8888-9999",
+    "direccion": "Lola Mora 759 - CABA",
+    "razonSocial": null
+  },
+  {
+    "id": 6,
+    "tipoDoc": "CUIT",
+    "nroDoc": "30-77788899-4",
+    "nombre": "",
+    "email": "masterclean@gmail.com",
+    "telefono": "11-6565-6565",
+    "direccion": "Av. Santa Fe 3535",
+    "razonSocial": "MasterClean SA"
+  },
+  {
+    "id": 7,
+    "tipoDoc": "DNI",
+    "nroDoc": "77788899",
+    "nombre": "Homero Simpson",
+    "email": "homero@gmail.com",
+    "telefono": "11-3333-4444",
+    "direccion": "Av. Siempre Viva 123",
+    "razonSocial": null
+  }
+]
