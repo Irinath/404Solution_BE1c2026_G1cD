@@ -41,6 +41,10 @@ block contenido
             label(for="direccion") Dirección:
             input(type="text" id="direccion" name="direccion" value=datos ? datos.direccion : '' placeholder="Ej: Av. Colón 123, Córdoba")
 
+        div
+            label(for="saldoCuentaCorriente") Saldo de Cuenta Corriente Inicial ($):
+            input(type="number" id="saldoCuentaCorriente" name="saldoCuentaCorriente" step="0.01" value=datos ? datos.saldoCuentaCorriente : '0')
+            
         div.form-actions
             button(type="submit").btn-guardar Registrar Proveedor
             a(href="/proveedores").btn-cancelar Cancelar
