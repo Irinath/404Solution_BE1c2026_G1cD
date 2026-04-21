@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "nombre": "Detergente Enzimático 5L",
+    "categoria": "Limpieza Industrial",
+    "stockActual": 10,
+    "stockMinimo": 15,
+    "precio": "2500"
+  },
+  {
+    "id": 2,
+    "nombre": "Desinfectante Amonio Cuaternario",
+    "categoria": "Desinfección",
+    "stockActual": 45,
+    "stockMinimo": 20,
+    "precio": 1800
+  },
+  {
+    "id": 3,
+    "nombre": "Guantes de Nitrilo Talle M",
+    "categoria": "Seguridad e Higiene",
+    "stockActual": 100,
+    "stockMinimo": 50,
+    "precio": 500
+  },
+  {
+    "id": 4,
+    "nombre": "Limpiador Ácido para Baños",
+    "categoria": "Limpieza Industrial",
+    "stockActual": 5,
+    "stockMinimo": 10,
+    "precio": 2200
+  }
+]
