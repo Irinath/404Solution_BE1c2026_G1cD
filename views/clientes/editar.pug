@@ -37,7 +37,11 @@ block contenido
         div
             label(for="direccion") Dirección:
             input(type="text" id="direccion" name="direccion" value=cliente.direccion)
-
+        
+        div
+            label(for="saldoCuentaCorriente") Saldo de Cuenta Corriente ($):
+            input(type="number" id="saldoCuentaCorriente" name="saldoCuentaCorriente" step="0.01" value=cliente.saldoCuentaCorriente required)
+         
         div.form-actions
             button(type="submit").btn-guardar Guardar Cambios
             a(href="/clientes").btn-cancelar Cancelar

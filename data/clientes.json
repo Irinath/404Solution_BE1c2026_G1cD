@@ -7,7 +7,8 @@
     "email": "juan@ejemplo.com",
     "telefono": "11-4321-5566",
     "direccion": "Av. Santa Fe 2500, Palermo, CABA",
-    "razonSocial": null
+    "razonSocial": null,
+    "saldoCuentaCorriente": 0
   },
   {
     "id": 2,
@@ -17,7 +18,8 @@
     "email": "ventas@limpiezatotal.com.ar",
     "telefono": "11-4899-0011",
     "direccion": "Florida 150, Microcentro, CABA",
-    "razonSocial": "Limpieza Total S.R.L."
+    "razonSocial": "Limpieza Total S.R.L.",
+    "saldoCuentaCorriente": 380000
   },
   {
     "id": 3,
@@ -27,7 +29,8 @@
     "email": "hola@gmail.com",
     "telefono": "351-7565656",
     "direccion": "Av Colon 123",
-    "razonSocial": null
+    "razonSocial": null,
+    "saldoCuentaCorriente": 0
   },
   {
     "id": 4,
@@ -37,6 +40,7 @@
     "email": "hola@gmail.com",
     "telefono": "351789564",
     "direccion": "Hola Susana 8822",
-    "razonSocial": "Hola SRL"
+    "razonSocial": "Hola SRL",
+    "saldoCuentaCorriente": -150000
   }
 ]
