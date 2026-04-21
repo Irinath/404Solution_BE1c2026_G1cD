@@ -7,7 +7,8 @@
     "email": "todo_limpio@gmail.com",
     "telefono": "11-4444-5555",
     "direccion": "Av. Libertador 1000 - CABA",
-    "razonSocial": "Todo Limpio SRL"
+    "razonSocial": "Todo Limpio SRL",
+    "saldoCuentaCorriente": 0
   },
   {
     "id": 2,
@@ -17,7 +18,8 @@
     "email": "limpio_lux@gmail.com",
     "telefono": "11-4999-9999",
     "direccion": "Av. Cabildo 2500 - CABA",
-    "razonSocial": "Limpio Lux SA"
+    "razonSocial": "Limpio Lux SA",
+    "saldoCuentaCorriente": 0
   },
   {
     "id": 3,
@@ -27,7 +29,8 @@
     "email": "brillo@gmail.com",
     "telefono": "11-3333-7777",
     "direccion": "Av. Independencia 3800 - CABA",
-    "razonSocial": "Brillo SRL"
+    "razonSocial": "Brillo SRL",
+    "saldoCuentaCorriente": 0
   },
   {
     "id": 4,
@@ -37,7 +40,8 @@
     "email": "pepito@gmail.com",
     "telefono": "11-4545-6565",
     "direccion": "Lola Mora 759 - CABA",
-    "razonSocial": "Pepito El Limpio SA"
+    "razonSocial": "Pepito El Limpio SA",
+    "saldoCuentaCorriente": -4500000
   },
   {
     "id": 5,
@@ -47,7 +51,8 @@
     "email": "lola@gmail.com",
     "telefono": "11-8888-9999",
     "direccion": "Lola Mora 759 - CABA",
-    "razonSocial": null
+    "razonSocial": null,
+    "saldoCuentaCorriente": -1200000
   },
   {
     "id": 6,
@@ -57,7 +62,8 @@
     "email": "masterclean@gmail.com",
     "telefono": "11-6565-6565",
     "direccion": "Av. Santa Fe 3535",
-    "razonSocial": "MasterClean SA"
+    "razonSocial": "MasterClean SA",
+    "saldoCuentaCorriente": 0
   },
   {
     "id": 7,
@@ -67,6 +73,7 @@
     "email": "homero@gmail.com",
     "telefono": "11-3333-4444",
     "direccion": "Av. Siempre Viva 123",
-    "razonSocial": null
+    "razonSocial": null,
+    "saldoCuentaCorriente": 0
   }
 ]

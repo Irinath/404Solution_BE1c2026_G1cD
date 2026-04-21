@@ -1,0 +1,56 @@
+extends ../layout
+
+block contenido
+    h1 Resumen Financiero
+    
+    div(style="display: flex; gap: 15px; margin-bottom: 25px;")
+        div(style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; text-align: center; background-color: #fff;")
+            h3(style="font-size: 0.9rem; color: #555; margin-bottom: 5px;") A Cobrar (Activo)
+            p(style="font-size: 1.1rem;")
+                span(style="color: #333;") $ 
+                span(style="color: green;") #{totalCobrar.toLocaleString('es-AR')}
+        
+        div(style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; text-align: center; background-color: #fff;")
+            h3(style="font-size: 0.9rem; color: #555; margin-bottom: 5px;") A Pagar (Pasivo)
+            p(style="font-size: 1.1rem;")
+                span(style="color: #333;") $ 
+                span(style="color: #cc0000;") #{totalPagar.toLocaleString('es-AR')}
+            
+        div(style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; text-align: center; background-color: #f9f9f9;")
+            h3(style="font-size: 0.9rem; color: #333; margin-bottom: 5px;") Balance Neto
+            p(style="font-size: 1.1rem;")
+                span(style="color: #333;") $ 
+                span(style=`color: ${balanceNeto > 0 ? 'green' : (balanceNeto < 0 ? '#cc0000' : '#333')}`) #{balanceNeto.toLocaleString('es-AR')}
+
+    if registros.length > 0
+        table
+            thead
+                tr
+                    th Entidad
+                    th Nombre
+                    th Tipo
+                    th Saldo
+                    th Acciones
+            tbody
+                each reg in registros
+                    tr
+                        td= reg.entidad
+                        td= reg.nombre
+                        td= reg.tipo
+                        
+                        td(style=`color: ${reg.saldo > 0 ? 'green' : (reg.saldo < 0 ? '#cc0000' : '#333')}`)
+                            | $ #{Math.abs(reg.saldo).toLocaleString('es-AR')} 
+                            if reg.saldo > 0
+                                | (a favor)
+                            else if reg.saldo < 0
+                                | (deuda)
+                            else
+                                | (al día)
+                        td
+                            div.acciones-container
+                                if reg.entidad === 'Cliente'
+                                    a(href=`/clientes/editar/${reg.id}`).btn-editar Ver Perfil
+                                else
+                                    a(href=`/proveedores/editar/${reg.id}`).btn-editar Ver Perfil
+    else
+        p No hay movimientos registrados en el sistema.
