@@ -5,12 +5,11 @@ const rutasProductos = require('./routes/productoRoutes');
 const clienteRoutes = require('./routes/clienteRoutes');
 const proveedorRoutes = require('./routes/proveedorRoutes');
 
-// Configuración de Pug y estaticos(Clase 4)
+// Configuración de Pug y estaticos
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, 'public')));
 
-// Middlewares (Clase 2 y 4)
+// Middlewares 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true })); // Para leer formularios
 app.use(express.json()); // Para Thunder Client
