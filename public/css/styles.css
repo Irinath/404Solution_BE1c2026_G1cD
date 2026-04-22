@@ -284,3 +284,9 @@ form div button, form div a {
     display: flex;
     width: 100%;
 }
+
+/* Para que el label y el input dela razón social tengan el mismo tamaño */
+#campo-razonSocial label, #campo-razonSocial input {
+    display: flex;
+    width: 100%;
+}
