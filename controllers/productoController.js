@@ -4,7 +4,7 @@ const productoController = {
     // 1. Renderiza la lista completa en la home
     index: (req, res) => {
         const productos = modeloProducto.listarTodos();
-        res.render('stock/index', {
+        res.render('productos/index', {
             titulo: 'Inventario TodoStock S.A.',
             productos: productos
         });
@@ -12,7 +12,7 @@ const productoController = {
 
     // 2. Muestra el formulario de carga vacío
     formCrear: (req, res) => {
-        res.render('stock/crear', {
+        res.render('productos/crear', {
             titulo: 'Registrar Nuevo Producto',
             error: null,
             datos: null
@@ -32,7 +32,7 @@ const productoController = {
             const datosCargados = req.body;
 
             // Renderizamos el formulario de nuevo
-            res.render('stock/crear', {
+            res.render('productos/crear', {
                 titulo: 'Registrar Nuevo Producto',
                 error: error.message,
                 // Mandamos los datos excepto el ID
@@ -49,7 +49,7 @@ const productoController = {
     // Muestra el formulario de edición con los datos cargados
     formEditar: (req, res) => {
         const producto = modeloProducto.buscarPorId(req.params.id);
-        res.render('stock/editar', { titulo: 'Editar Producto', producto });
+        res.render('productos/editar', { titulo: 'Editar Producto', producto });
     },
 
     // Procesa la actualización
