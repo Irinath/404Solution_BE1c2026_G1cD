@@ -17,7 +17,7 @@ block contenido
                 option(value="DNI" selected=datos && datos.tipoDoc === "DNI") DNI
                 option(value="CUIT" selected=datos && datos.tipoDoc === "CUIT") CUIT
 
-        div#campo-nombre
+        div#campo-nombre(style="display:none")
             label(for="nombre") Nombre:
             input(type="text" id="nombre" name="nombre" value=datos ? datos.nombre : '' placeholder="Ej: Juan Pérez")
 

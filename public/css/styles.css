@@ -278,3 +278,9 @@ td div a, td div button {
 form div button, form div a {
     width: 200px;
 }
+
+/* Para que el label y el input del campo nombre tengan el mismo tamaño */
+#campo-nombre label, #campo-nombre input {
+    display: flex;
+    width: 100%;
+}
