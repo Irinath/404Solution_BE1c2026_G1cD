@@ -30,13 +30,5 @@
     "precio": 2200,
     "stockActual": 5,
     "stockMinimo": 10
-  },
-  {
-    "id": 6,
-    "nombre": "Lavandina en gel",
-    "categoria": "Limpieza Industrial",
-    "precio": 7000,
-    "stockActual": 5,
-    "stockMinimo": 100
   }
 ]
