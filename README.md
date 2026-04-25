@@ -29,6 +29,7 @@ Este proyecto es la **Primer Entrega** de la materia de Desarrollo de Sistemas W
 
 ## Estructura del Proyecto
 
+```plain
 BE-Primer-Entrega/
 ├── data/           # Archivos JSON (Persistencia)
 ├── models/         # Clases y lógica de datos (POO)
@@ -37,3 +38,4 @@ BE-Primer-Entrega/
 ├── public/         # Archivos estáticos (CSS, imágenes)
 ├── views/          # Plantillas Pug
 └── app.js          # Punto de entrada del servidor
+```
