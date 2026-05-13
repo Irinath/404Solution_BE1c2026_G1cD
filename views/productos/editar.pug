@@ -3,7 +3,7 @@ extends ../layout
 block contenido
     h1 Editar Producto: #{producto.nombre}
 
-    form(action=`/editar/${producto.id}` method="POST")
+    form(action=`/productos/editar/${producto.id}` method="POST")
         div
             label ID (No editable):
             input(type="number" value=producto.id disabled)
@@ -28,4 +28,4 @@ block contenido
         
         div.form-actions
             button(type="submit").btn-guardar Guardar Cambios
-            a(href="/").btn-cancelar Cancelar
+            a(href="/productos").btn-cancelar Cancelar

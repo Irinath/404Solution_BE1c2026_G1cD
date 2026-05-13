@@ -103,7 +103,7 @@ th {
 
 .acciones-container button {
     border: 1px solid #cc0000;
-    color: #cc0000; 
+    color: #cc0000;
 }
 
 .acciones-container button:hover {
@@ -221,9 +221,9 @@ td div {
 .btn-cancelar {
     display: inline-block;
     padding: 10px 20px;
-    color: #666;             
+    color: #666;
     text-decoration: none;
-    border: 1px solid #ccc;  
+    border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1rem;
     font-weight: bold;
@@ -240,7 +240,7 @@ td div {
 
 
 .btn-guardar {
-    flex: 1; 
+    flex: 1;
     background-color: #18bc9c;
     color: white;
     padding: 10px;
@@ -268,25 +268,46 @@ footer {
 
 /* Para que los botones editar y eliminar tengan el mismo tamaño */
 
-td div a, td div button {
+td div a,
+td div button {
     width: 80px;
     margin-top: 2px;
 }
 
 /* Para que los botones registar y cancelar tengan el mismo tamaño */
 
-form div button, form div a {
+form div button,
+form div a {
     width: 200px;
 }
 
 /* Para que el label y el input del campo nombre tengan el mismo tamaño */
-#campo-nombre label, #campo-nombre input {
+#campo-nombre label,
+#campo-nombre input {
     display: flex;
     width: 100%;
 }
 
 /* Para que el label y el input dela razón social tengan el mismo tamaño */
-#campo-razonSocial label, #campo-razonSocial input {
+#campo-razonSocial label,
+#campo-razonSocial input {
     display: flex;
     width: 100%;
+    text-align: center;
 }
+
+.contenedor {
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 5px;
+    /* background-image: url('/img/business.jpg'); */
+    background-image: url('/img/finanzas.webp');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 500px;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 15px;
+}
+

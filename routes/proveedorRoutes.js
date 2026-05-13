@@ -3,6 +3,7 @@ const router = express.Router();
 const proveedorController = require('../controllers/proveedorController');
 
 router.get('/', proveedorController.index);
+router.get('/listar', proveedorController.listar);
 router.get('/nuevo', proveedorController.formCrear);
 router.post('/nuevo', proveedorController.almacenar);
 router.get('/editar/:id', proveedorController.formEditar);

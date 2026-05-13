@@ -1,16 +1,19 @@
-const modeloProducto = require('../models/Producto');
+const Producto = require('../models/Producto');
 
 const productoController = {
-    // 1. Renderiza la lista completa en la home
-    index: (req, res) => {
-        const productos = modeloProducto.listarTodos();
-        res.render('productos/index', {
-            titulo: 'Inventario TodoStock S.A.',
-            productos: productos
-        });
+    index: async (req, res) => {
+        try {
+            const productos = await Producto.find().sort({ id: 1 });
+            res.render('productos/index', {
+                titulo: 'Inventario TodoStock S.A.',
+                productos: productos
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Error al listar productos');
+        }
     },
 
-    // 2. Muestra el formulario de carga vacío
     formCrear: (req, res) => {
         res.render('productos/crear', {
             titulo: 'Registrar Nuevo Producto',
@@ -19,49 +22,72 @@ const productoController = {
         });
     },
 
-    // 3. Procesa los datos del formulario (POST)
-    almacenar: (req, res) => {
+    almacenar: async (req, res) => {
         try {
-            // Pasamos todo el req.body que ahora contiene el ID manual
-            modeloProducto.crear(req.body);
+            const existe = await Producto.findOne({ id: parseInt(req.body.id) });
+            if (existe) {
+                throw new Error(`El ID ${req.body.id} ya está en uso.`);
+            }
 
-            // Si todo sale bien, redirige a la lista
-            res.redirect('/');
+            await Producto.create({
+                id: parseInt(req.body.id),
+                nombre: req.body.nombre,
+                categoria: req.body.categoria,
+                precio: parseFloat(req.body.precio),
+                stockActual: parseInt(req.body.stockActual),
+                stockMinimo: parseInt(req.body.stockMinimo)
+            });
+            res.redirect('/productos');
         } catch (error) {
-            // Guardamos los datos enviados para devolverlos a la vista
-            const datosCargados = req.body;
-
-            // Renderizamos el formulario de nuevo
             res.render('productos/crear', {
                 titulo: 'Registrar Nuevo Producto',
                 error: error.message,
-                // Mandamos los datos excepto el ID
-                datos: {
-                    nombre: datosCargados.nombre,
-                    categoria: datosCargados.categoria,
-                    precio: datosCargados.precio,
-                    stockActual: datosCargados.stockActual,
-                    stockMinimo: datosCargados.stockMinimo
-                }
+                datos: req.body
             });
         }
     },
-    // Muestra el formulario de edición con los datos cargados
-    formEditar: (req, res) => {
-        const producto = modeloProducto.buscarPorId(req.params.id);
-        res.render('productos/editar', { titulo: 'Editar Producto', producto });
+
+    formEditar: async (req, res) => {
+        try {
+            const producto = await Producto.findOne({ id: parseInt(req.params.id) });
+            if (!producto) {
+                return res.status(404).send('Producto no encontrado');
+            }
+            res.render('productos/editar', { titulo: 'Editar Producto', producto });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Error al buscar producto');
+        }
     },
 
-    // Procesa la actualización
-    actualizar: (req, res) => {
-        modeloProducto.actualizar(req.params.id, req.body);
-        res.redirect('/');
+    actualizar: async (req, res) => {
+        try {
+            await Producto.findOneAndUpdate(
+                { id: parseInt(req.params.id) },
+                {
+                    nombre: req.body.nombre,
+                    categoria: req.body.categoria,
+                    precio: parseFloat(req.body.precio),
+                    stockActual: parseInt(req.body.stockActual),
+                    stockMinimo: parseInt(req.body.stockMinimo)
+                },
+                { new: true }
+            );
+            res.redirect('/productos');
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Error al actualizar producto');
+        }
     },
 
-    // Procesa la eliminación
-    eliminar: (req, res) => {
-        modeloProducto.eliminar(req.params.id);
-        res.redirect('/');
+    eliminar: async (req, res) => {
+        try {
+            await Producto.findOneAndDelete({ id: parseInt(req.params.id) });
+            res.redirect('/productos');
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Error al eliminar producto');
+        }
     }
 };
 

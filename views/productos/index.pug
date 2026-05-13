@@ -4,7 +4,7 @@ block contenido
     h1 Stock Actual de Productos
 
     div(style='text-align: right; margin-bottom: 15px;')
-            a.btn-nuevo(href='/nuevo') + Registrar Producto
+            a.btn-nuevo(href='/productos/nuevo') + Registrar Producto
 
     if productos.length > 0
         table
@@ -20,21 +20,21 @@ block contenido
             tbody
                 each prod in productos
                     tr
-                        td= prod.id
+                        td(style="text-align: center;")= prod.id
                         td= prod.nombre
                         td= prod.categoria
-                        td $ #{prod.precio}
-                        td= prod.stockActual
+                        td(style="text-align: right;") $ #{prod.precio}
+                        td(style="text-align: center;")= prod.stockActual
                         td
                             if prod.stockActual <= prod.stockMinimo
-                                span(style="color: red; font-weight: bold;") STOCK BAJO - REPONER
+                                span(style="color: red; font-weight: bold; display:flex; text-align: center;") STOCK BAJO
                             else
-                                span(style="color: green; font-weight: bold;") STOCK OK
+                                span(style="color: green; font-weight: bold; display:flex; text-align: center;") STOCK OK
                         td
                             div.acciones-container 
-                                a(href=`/editar/${prod.id}`) Editar
+                                a(href=`/productos/editar/${prod.id}`) Editar
 
-                                form(action=`/eliminar/${prod.id}`, method="POST" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar este producto?')")
+                                form(action=`/productos/eliminar/${prod.id}`, method="POST" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar este producto?')")
                                     button.btn-accion.btn-borrar(type="submit") Eliminar
                 else
                     p No hay productos registrados en el sistema.

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const productoController = require('../controllers/productoController');
 
+// cambio el home
 // Ruta principal: Listado
 router.get('/', productoController.index);
 

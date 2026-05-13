@@ -1,34 +1,30 @@
 extends ../layout
 
 block contenido
-    h1 Listado de Clientes
 
-    div(style='text-align: right; margin-bottom: 15px;')
-        a.btn-nuevo(href='/clientes/nuevo') + Registrar Cliente
+    h1 Clientes
     
-    if clientes.length > 0
-        table
-            thead
-                tr
-                    th ID
-                    th Documento
-                    th Nombre / Razón Social
-                    th Email
-                    th Teléfono
-                    th Acciones
-            tbody
-                each prod in clientes
-                    tr
-                        td= prod.id
-                        td #{prod.tipoDoc}: #{prod.nroDoc}
-                        td= prod.tipoDoc === 'DNI' ? prod.nombre : prod.razonSocial
-                        td= prod.email
-                        td= prod.telefono
-                        td
-                            div.acciones-container 
-                                a(href=`/clientes/editar/${prod.id}`) Editar
+        div.contenedor
 
-                                form(action=`/clientes/eliminar/${prod.id}`, method="POST" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar este cliente?')")
-                                    button.btn-accion.btn-borrar(type="submit") Eliminar
-    else
-        p No hay clientes registrados en el sistema.
+           
+            a(href="/clientes/nuevo")(style="display: flex; margin: 15px; border: 1px solid #ddd; border-radius: 4px; align-items: center; justify-content: center; background-color: #fff; width: 250px; height: 150px; text-decoration: none;")
+                h2(style="font-size: 1.5rem; color: #555;") Agregar Clientes
+        
+            a(href="/clientes/listar")(style="display: flex; margin: 15px; border: 1px solid #ddd; border-radius: 4px; align-items: center; justify-content: center; background-color: #fff; width: 250px; height: 150px; text-decoration: none;")
+                h2(style="font-size: 1.5rem; color: #555; margin-bottom: 5px;") Listar Clientes
+           
+            a(href="/")(style="display: flex; margin: 15px; border: 1px solid #ddd; border-radius: 4px; align-items: center; justify-content: center; background-color: #fff; width: 250px; height: 150px; text-decoration: none;")
+                h2(style="font-size: 1.5rem; color: #333; margin-bottom: 5px;") Facturación Clientes
+        
+            a(href="/")(style="display: flex; margin: 15px; border: 1px solid #ddd; border-radius: 4px; align-items: center; justify-content: center; background-color: #fff; width: 250px; height: 150px; text-decoration: none;")
+                h2(style="font-size: 1.5rem; color: #333; margin-bottom: 5px;") Listar Facturas Clientes
+            
+            a(href="/")(style="display: flex; margin: 15px; border: 1px solid #ddd; border-radius: 4px; align-items: center; justify-content: center; background-color: #fff; width: 250px; height: 150px; text-decoration: none;")
+                h2(style="font-size: 1.5rem; color: #333; margin-bottom: 5px;") Nota de Débito
+            
+            a(href="/")(style="display: flex; margin: 15px; border: 1px solid #ddd; border-radius: 4px; align-items: center; justify-content: center; background-color: #fff; width: 250px; height: 150px; text-decoration: none;")
+                h2(style="font-size: 1.5rem; color: #333; margin-bottom: 5px;") Nota de Crédito
+            
+            a(href="/")(style="display: flex; margin: 15px; border: 1px solid #ddd; border-radius: 4px; align-items: center; justify-content: center; background-color: #fff; width: 250px; height: 150px; text-decoration: none;")
+                h2(style="font-size: 1.5rem; color: #333; margin-bottom: 5px;") Presupuesto
+            
