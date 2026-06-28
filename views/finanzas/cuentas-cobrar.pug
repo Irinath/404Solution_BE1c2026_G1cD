@@ -8,6 +8,11 @@ block contenido
     if error
         p.error= error
     
+    //- Botón de acción principal
+    div.acciones-header
+        a.btn-nuevo(href="/finanzas/cobrar") 💵 Cobrar Facturas
+        a.btn-nuevo(href="/recibos-cobro" style="margin-left: 10px; background-color: #17a2b8;") 📋 Ver Recibos
+    
     //- Formulario de filtros
     .filtros-container
         form.filtros-form(method='GET' action='/finanzas/cuentas-cobrar')

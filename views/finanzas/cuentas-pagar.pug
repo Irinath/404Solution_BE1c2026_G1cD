@@ -8,6 +8,11 @@ block contenido
     if error
         p.error= error
     
+    //- Botón de acción principal
+    div.acciones-header
+        a.btn-nuevo(href="/finanzas/pagar") 💸 Pagar Facturas
+        a.btn-nuevo(href="/ordenes-pago" style="margin-left: 10px; background-color: #17a2b8;") 📋 Ver Órdenes de Pago
+    
     //- Formulario de filtros
     .filtros-container
         form.filtros-form(method='GET' action='/finanzas/cuentas-pagar')

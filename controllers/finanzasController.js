@@ -1,9 +1,13 @@
 const FacturaCliente = require("../models/FacturaCliente");
 const FacturaProveedor = require("../models/FacturaProveedor");
 const OrdenPago = require("../models/OrdenPago");
+const ReciboCobro = require("../models/ReciboCobro");
 const Presupuesto = require("../models/Presupuesto");
 const NotaDeCredito = require("../models/NotaDeCredito");
 const NotaDeDebito = require("../models/NotaDeDebito");
+const Cliente = require("../models/Cliente");
+const Proveedor = require("../models/Proveedor");
+const mongoose = require("mongoose");
 
 const finanzasController = {
   // Dashboard principal con estadísticas
@@ -174,7 +178,6 @@ const finanzasController = {
   cuentasPorCobrar: async (req, res) => {
     try {
       const { fechaDesde, fechaHasta, clienteId, tipoDoc } = req.query;
-      const Cliente = require("../models/Cliente");
       
       // Traer todos los clientes para el select
       const todosLosClientes = await Cliente.find().sort({ razonSocial: 1, nombre: 1 });
@@ -350,7 +353,6 @@ const finanzasController = {
   cuentasPorPagar: async (req, res) => {
     try {
       const { fechaDesde, fechaHasta, proveedorId, tipoDoc } = req.query;
-      const Proveedor = require("../models/Proveedor");
 
       // Traer todos los proveedores para el select
       const todosLosProveedores = await Proveedor.find().sort({ razonSocial: 1, nombre: 1 });
@@ -439,7 +441,282 @@ const finanzasController = {
         filtros: {}
       });
     }
-  }
+  },
+
+  // Formulario de cobro desde finanzas
+  formCobrar: async (req, res) => {
+    try {
+      const clientes = await Cliente.find().sort({ nombre: 1 });
+      res.render("finanzas/cobrar", {
+        titulo: "Cobrar Facturas - TodoStock S.A.",
+        clientes: clientes,
+        error: null,
+        datos: null,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error al cargar formulario de cobro");
+    }
+  },
+
+  // Procesar cobro desde finanzas (crea un ReciboCobro)
+  procesarCobro: async (req, res) => {
+    try {
+      const {
+        clienteId,
+        formaPago,
+        referencia,
+        bancoCuenta,
+        fechaCobro,
+        facturasSeleccionadas,
+        observaciones,
+        recibidoPor,
+        montoCobrado,
+      } = req.body;
+
+      if (!mongoose.Types.ObjectId.isValid(clienteId)) {
+        throw new Error("ID de cliente inválido");
+      }
+
+      const cliente = await Cliente.findById(clienteId);
+      if (!cliente) {
+        throw new Error("Cliente no encontrado");
+      }
+
+      // Parsear facturas seleccionadas
+      let facturasIds = [];
+      let facturasDetalles = [];
+      let totalCobro = 0;
+
+      if (facturasSeleccionadas) {
+        if (Array.isArray(facturasSeleccionadas)) {
+          facturasIds = facturasSeleccionadas;
+        } else {
+          facturasIds = [facturasSeleccionadas];
+        }
+
+        for (const facturaId of facturasIds) {
+          const factura = await FacturaCliente.findById(facturaId);
+          if (factura && factura.estatus === "Pendiente") {
+            totalCobro += factura.total;
+            facturasDetalles.push({
+              facturaId: factura._id,
+              numero: factura.numero,
+              fecha: factura.fechaEmision,
+              total: factura.total,
+            });
+          }
+        }
+      }
+
+      if (facturasDetalles.length === 0) {
+        throw new Error("Debe seleccionar al menos una factura pendiente");
+      }
+
+      const montoFinal = parseFloat(montoCobrado) || totalCobro;
+
+      // Crear recibo de cobro
+      const recibo = new ReciboCobro({
+        clienteId: clienteId,
+        clienteInfo: {
+          cuit: cliente.nroDoc,
+          nombre: cliente.tipoDoc === "DNI" ? cliente.nombre : cliente.razonSocial,
+          direccion: cliente.direccion,
+          telefono: cliente.telefono,
+        },
+        fechaEmision: new Date(),
+        estatus: "Emitido",
+        facturasCobradas: facturasDetalles,
+        formasPago: [
+          {
+            formaPago: formaPago,
+            referencia: referencia,
+            bancoCuenta: bancoCuenta,
+            fecha: new Date(fechaCobro),
+            montoNeto: montoFinal,
+          },
+        ],
+        montoCobrado: montoFinal,
+        observaciones: observaciones,
+        recibidoPor: recibidoPor,
+      });
+
+      await recibo.save();
+
+      // Marcar facturas como pagadas
+      for (const facturaId of facturasIds) {
+        await FacturaCliente.findByIdAndUpdate(facturaId, {
+          estatus: "Pagada",
+          cobranzaId: recibo.numero,
+          fechaCobro: new Date(fechaCobro),
+        });
+      }
+
+      // Actualizar saldo del cliente
+      let saldoActual = parseFloat(cliente.saldoCuentaCorriente) || 0;
+      cliente.saldoCuentaCorriente = saldoActual - montoFinal;
+      await cliente.save();
+
+      res.redirect(`/recibos-cobro/ver/${recibo.numero}`);
+    } catch (error) {
+      console.error(error);
+      try {
+        const clientes = await Cliente.find().sort({ nombre: 1 });
+        res.render("finanzas/cobrar", {
+          titulo: "Cobrar Facturas - TodoStock S.A.",
+          clientes: clientes,
+          error: error.message,
+          datos: req.body,
+        });
+      } catch (err) {
+        res.status(500).send("Error al procesar cobro");
+      }
+    }
+  },
+
+  // Formulario de pago desde finanzas
+  formPagar: async (req, res) => {
+    try {
+      const proveedores = await Proveedor.find().sort({ nombre: 1 });
+      res.render("finanzas/pagar", {
+        titulo: "Pagar Facturas - TodoStock S.A.",
+        proveedores: proveedores,
+        error: null,
+        datos: null,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error al cargar formulario de pago");
+    }
+  },
+
+  // Procesar pago desde finanzas (crea una OrdenPago)
+  procesarPago: async (req, res) => {
+    try {
+      const {
+        proveedorId,
+        formaPago,
+        referencia,
+        bancoCuenta,
+        fechaPago,
+        facturasSeleccionadas,
+        observaciones,
+        elaboradoPor,
+        montoAPagar,
+      } = req.body;
+
+      if (!mongoose.Types.ObjectId.isValid(proveedorId)) {
+        throw new Error("ID de proveedor inválido");
+      }
+
+      const proveedor = await Proveedor.findById(proveedorId);
+      if (!proveedor) {
+        throw new Error("Proveedor no encontrado");
+      }
+
+      // Parsear facturas seleccionadas
+      let facturasIds = [];
+      let facturasDetalles = [];
+      let totalPago = 0;
+
+      if (facturasSeleccionadas) {
+        if (Array.isArray(facturasSeleccionadas)) {
+          facturasIds = facturasSeleccionadas;
+        } else {
+          facturasIds = [facturasSeleccionadas];
+        }
+
+        for (const facturaId of facturasIds) {
+          const factura = await FacturaProveedor.findById(facturaId);
+          if (factura && factura.estatus === "Pendiente") {
+            totalPago += factura.total;
+            facturasDetalles.push({
+              facturaId: factura._id,
+              numero: factura.numero,
+              fecha: factura.fechaEmision,
+              total: factura.total,
+            });
+          }
+        }
+      }
+
+      if (facturasDetalles.length === 0) {
+        throw new Error("Debe seleccionar al menos una factura pendiente");
+      }
+
+      const montoFinal = parseFloat(montoAPagar) || totalPago;
+
+      // Crear conceptos
+      const conceptosArray = facturasDetalles.map((f) => ({
+        codigoConcepto: "FACT",
+        descripcion: `Pago Factura ${f.numero}`,
+        debe: 0,
+        haber: f.total,
+        impuesto: "EXE",
+        montoImpuesto: 0,
+        netoRenglon: f.total,
+      }));
+
+      // Crear orden de pago
+      const orden = new OrdenPago({
+        proveedorId: proveedorId,
+        proveedorInfo: {
+          rif: proveedor.nroDoc,
+          nombre: proveedor.tipoDoc === "DNI" ? proveedor.nombre : proveedor.razonSocial,
+          direccion: proveedor.direccion,
+          telefono: proveedor.telefono,
+        },
+        fechaEmision: new Date(),
+        estatus: "Pendiente",
+        conceptos: conceptosArray,
+        formasPago: [
+          {
+            formaPago: formaPago,
+            referencia: referencia,
+            bancoCuenta: bancoCuenta,
+            fecha: new Date(fechaPago),
+            montoNeto: montoFinal,
+          },
+        ],
+        subtotalDebe: 0,
+        subtotalHaber: montoFinal,
+        subtotalImpuesto: 0,
+        subtotalNeto: montoFinal,
+        totalRetencion: 0,
+        totalImpuesto: 0,
+        montoAPagar: montoFinal,
+        observaciones: observaciones,
+        elaboradoPor: elaboradoPor,
+        facturasPagadas: facturasDetalles,
+      });
+
+      await orden.save();
+
+      // Marcar facturas como pagadas
+      for (const facturaId of facturasIds) {
+        await FacturaProveedor.findByIdAndUpdate(facturaId, {
+          estatus: "Pagada",
+          ordenPagoId: orden.numero,
+          fechaPago: new Date(fechaPago),
+        });
+      }
+
+      res.redirect(`/ordenes-pago/ver/${orden.numero}`);
+    } catch (error) {
+      console.error(error);
+      try {
+        const proveedores = await Proveedor.find().sort({ nombre: 1 });
+        res.render("finanzas/pagar", {
+          titulo: "Pagar Facturas - TodoStock S.A.",
+          proveedores: proveedores,
+          error: error.message,
+          datos: req.body,
+        });
+      } catch (err) {
+        res.status(500).send("Error al procesar pago");
+      }
+    }
+  },
 };
 
 module.exports = finanzasController;
