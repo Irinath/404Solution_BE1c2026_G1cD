@@ -11,17 +11,34 @@ block contenido
     //- Formulario de filtros
     .filtros-container
         form.filtros-form(method='GET' action='/finanzas/cuentas-cobrar')
-            .filtro-grupo
-                label(for='fechaDesde') Desde:
-                input#fechaDesde(type='date' name='fechaDesde' value=filtros.fechaDesde || '')
+            .filtro-fila
+                .filtro-grupo
+                    label(for='clienteId') Cliente:
+                    select#clienteId(name='clienteId')
+                        option(value='todos' selected=!filtros.clienteId || filtros.clienteId === 'todos') Todos los clientes
+                        each c in todosLosClientes
+                            - const nombreCliente = c.tipoDoc === 'DNI' ? c.nombre : c.razonSocial
+                            option(value=c._id.toString() selected=filtros.clienteId === c._id.toString()) #{nombreCliente} (#{c.nroDoc})
+                .filtro-grupo
+                    label(for='tipoDoc') Tipo de documento:
+                    select#tipoDoc(name='tipoDoc')
+                        option(value='todos' selected=!filtros.tipoDoc || filtros.tipoDoc === 'todos') Todos
+                        option(value='factura' selected=filtros.tipoDoc === 'factura') Facturas
+                        option(value='credito' selected=filtros.tipoDoc === 'credito') Notas de Crédito
+                        option(value='debito' selected=filtros.tipoDoc === 'debito') Notas de Débito
             
-            .filtro-grupo
-                label(for='fechaHasta') Hasta:
-                input#fechaHasta(type='date' name='fechaHasta' value=filtros.fechaHasta || '')
-            
-            .filtro-acciones
-                button.btn-filtrar(type='submit') 🔍 Filtrar
-                a.btn-limpiar(href='/finanzas/cuentas-cobrar') 🔄 Limpiar
+            .filtro-fila
+                .filtro-grupo
+                    label(for='fechaDesde') Desde:
+                    input#fechaDesde(type='date' name='fechaDesde' value=filtros.fechaDesde || '')
+                .filtro-grupo
+                    label(for='fechaHasta') Hasta:
+                    input#fechaHasta(type='date' name='fechaHasta' value=filtros.fechaHasta || '')
+                .filtro-grupo.filtro-acciones
+                    label &nbsp;
+                    .filtro-botones
+                        button.btn-filtrar(type='submit') 🔍 Filtrar
+                        a.btn-limpiar(href='/finanzas/cuentas-cobrar') 🔄 Limpiar
     
     //- Resumen total
     .resumen-total

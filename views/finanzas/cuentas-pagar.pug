@@ -11,17 +11,33 @@ block contenido
     //- Formulario de filtros
     .filtros-container
         form.filtros-form(method='GET' action='/finanzas/cuentas-pagar')
-            .filtro-grupo
-                label(for='fechaDesde') Desde:
-                input#fechaDesde(type='date' name='fechaDesde' value=filtros.fechaDesde || '')
+            .filtro-fila
+                .filtro-grupo
+                    label(for='proveedorId') Proveedor:
+                    select#proveedorId(name='proveedorId')
+                        option(value='todos' selected=!filtros.proveedorId || filtros.proveedorId === 'todos') Todos los proveedores
+                        each p in todosLosProveedores
+                            - const nombreProv = p.tipoDoc === 'DNI' ? p.nombre : p.razonSocial
+                            option(value=p._id.toString() selected=filtros.proveedorId === p._id.toString()) #{nombreProv} (#{p.nroDoc})
+                .filtro-grupo
+                    label(for='tipoDoc') Tipo de documento:
+                    select#tipoDoc(name='tipoDoc')
+                        option(value='todos' selected=!filtros.tipoDoc || filtros.tipoDoc === 'todos') Todos
+                        option(value='factura' selected=filtros.tipoDoc === 'factura') Facturas
+                        option(value='orden' selected=filtros.tipoDoc === 'orden') Órdenes de Pago
             
-            .filtro-grupo
-                label(for='fechaHasta') Hasta:
-                input#fechaHasta(type='date' name='fechaHasta' value=filtros.fechaHasta || '')
-            
-            .filtro-acciones
-                button.btn-filtrar(type='submit') 🔍 Filtrar
-                a.btn-limpiar(href='/finanzas/cuentas-pagar') 🔄 Limpiar
+            .filtro-fila
+                .filtro-grupo
+                    label(for='fechaDesde') Desde:
+                    input#fechaDesde(type='date' name='fechaDesde' value=filtros.fechaDesde || '')
+                .filtro-grupo
+                    label(for='fechaHasta') Hasta:
+                    input#fechaHasta(type='date' name='fechaHasta' value=filtros.fechaHasta || '')
+                .filtro-grupo.filtro-acciones
+                    label &nbsp;
+                    .filtro-botones
+                        button.btn-filtrar(type='submit') 🔍 Filtrar
+                        a.btn-limpiar(href='/finanzas/cuentas-pagar') 🔄 Limpiar
     
     //- Resumen total
     .resumen-total.pagar

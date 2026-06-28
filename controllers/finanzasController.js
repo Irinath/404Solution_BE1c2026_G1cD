@@ -173,8 +173,12 @@ const finanzasController = {
   // Cuentas por cobrar (facturas de clientes pendientes)
   cuentasPorCobrar: async (req, res) => {
     try {
-      const { fechaDesde, fechaHasta } = req.query;
+      const { fechaDesde, fechaHasta, clienteId, tipoDoc } = req.query;
+      const Cliente = require("../models/Cliente");
       
+      // Traer todos los clientes para el select
+      const todosLosClientes = await Cliente.find().sort({ razonSocial: 1, nombre: 1 });
+
       // Filtro de fechas
       let filtroFecha = {};
       if (fechaDesde || fechaHasta) {
@@ -191,21 +195,41 @@ const finanzasController = {
         }
       }
 
+      // Filtro por cliente seleccionado
+      let filtroCliente = {};
+      if (clienteId && clienteId !== 'todos') {
+        filtroCliente.clienteId = clienteId;
+      }
+
+      // Determinar qué tipos de documentos mostrar
+      const mostrarFacturas = !tipoDoc || tipoDoc === 'todos' || tipoDoc === 'factura';
+      const mostrarNC = !tipoDoc || tipoDoc === 'todos' || tipoDoc === 'credito';
+      const mostrarND = !tipoDoc || tipoDoc === 'todos' || tipoDoc === 'debito';
+
       // Facturas pendientes
-      const filtroFacturas = { estatus: "Pendiente", ...filtroFecha };
-      const facturas = await FacturaCliente.find(filtroFacturas)
-        .populate('clienteId', 'nombre razonSocial tipoDoc nroDoc')
-        .sort({ fechaVencimiento: 1 });
+      let facturas = [];
+      if (mostrarFacturas) {
+        const filtroFacturas = { estatus: "Pendiente", ...filtroFecha, ...filtroCliente };
+        facturas = await FacturaCliente.find(filtroFacturas)
+          .populate('clienteId', 'nombre razonSocial tipoDoc nroDoc')
+          .sort({ fechaVencimiento: 1 });
+      }
 
       // Notas de crédito pendientes
-      const filtroNC = { estatus: "Pendiente", ...filtroFecha };
-      const notasCredito = await NotaDeCredito.find(filtroNC)
-        .populate('clienteId', 'nombre razonSocial tipoDoc nroDoc');
+      let notasCredito = [];
+      if (mostrarNC) {
+        const filtroNC = { estatus: "Pendiente", ...filtroFecha, ...filtroCliente };
+        notasCredito = await NotaDeCredito.find(filtroNC)
+          .populate('clienteId', 'nombre razonSocial tipoDoc nroDoc');
+      }
 
       // Notas de débito pendientes
-      const filtroND = { estatus: "Pendiente", ...filtroFecha };
-      const notasDebito = await NotaDeDebito.find(filtroND)
-        .populate('clienteId', 'nombre razonSocial tipoDoc nroDoc');
+      let notasDebito = [];
+      if (mostrarND) {
+        const filtroND = { estatus: "Pendiente", ...filtroFecha, ...filtroCliente };
+        notasDebito = await NotaDeDebito.find(filtroND)
+          .populate('clienteId', 'nombre razonSocial tipoDoc nroDoc');
+      }
 
       // Agrupar por cliente
       const clientesMap = {};
@@ -299,11 +323,12 @@ const finanzasController = {
       res.render("finanzas/cuentas-cobrar", {
         titulo: "Cuentas por Cobrar - TodoStock S.A.",
         clientes,
+        todosLosClientes,
         total: Math.round(total * 100) / 100,
         sumaFacturas: Math.round(sumaFacturas * 100) / 100,
         totalNotasCredito: Math.round(totalNotasCredito * 100) / 100,
         totalNotasDebito: Math.round(totalNotasDebito * 100) / 100,
-        filtros: { fechaDesde, fechaHasta }
+        filtros: { fechaDesde, fechaHasta, clienteId, tipoDoc }
       });
     } catch (error) {
       console.error('Error en cuentas por cobrar:', error);
@@ -311,6 +336,7 @@ const finanzasController = {
         titulo: "Cuentas por Cobrar - TodoStock S.A.",
         error: "Error al cargar cuentas por cobrar: " + error.message,
         clientes: [],
+        todosLosClientes: [],
         total: 0,
         sumaFacturas: 0,
         totalNotasCredito: 0,
@@ -323,8 +349,12 @@ const finanzasController = {
   // Cuentas por pagar (facturas de proveedores pendientes)
   cuentasPorPagar: async (req, res) => {
     try {
-      const { fechaDesde, fechaHasta } = req.query;
-      
+      const { fechaDesde, fechaHasta, proveedorId, tipoDoc } = req.query;
+      const Proveedor = require("../models/Proveedor");
+
+      // Traer todos los proveedores para el select
+      const todosLosProveedores = await Proveedor.find().sort({ razonSocial: 1, nombre: 1 });
+
       // Mostrar únicamente facturas pendientes
       let filtro = {
         estatus: "Pendiente"
@@ -344,17 +374,57 @@ const finanzasController = {
         }
       }
 
-      const facturas = await FacturaProveedor.find(filtro)
-        .populate('proveedorId', 'nombre razonSocial tipoDoc nroDoc')
-        .sort({ fechaVencimiento: 1 });
+      // Filtro por proveedor seleccionado
+      if (proveedorId && proveedorId !== 'todos') {
+        filtro.proveedorId = proveedorId;
+      }
 
-      const total = facturas.reduce((sum, f) => sum + (f.total || 0), 0);
+      // Determinar qué tipos de documentos mostrar
+      const mostrarFacturas = !tipoDoc || tipoDoc === 'todos' || tipoDoc === 'factura';
+      const mostrarOrdenes = !tipoDoc || tipoDoc === 'todos' || tipoDoc === 'orden';
+
+      let facturas = [];
+      if (mostrarFacturas) {
+        facturas = await FacturaProveedor.find(filtro)
+          .populate('proveedorId', 'nombre razonSocial tipoDoc nroDoc')
+          .sort({ fechaVencimiento: 1 });
+      }
+
+      // Órdenes de pago pendientes
+      let ordenes = [];
+      if (mostrarOrdenes) {
+        let filtroOrden = { estatus: "Pendiente" };
+        if (proveedorId && proveedorId !== 'todos') filtroOrden.proveedorId = proveedorId;
+        if (fechaDesde || fechaHasta) {
+          filtroOrden.fechaEmision = {};
+          if (fechaDesde) {
+            const desde = new Date(fechaDesde);
+            desde.setHours(0, 0, 0, 0);
+            filtroOrden.fechaEmision.$gte = desde;
+          }
+          if (fechaHasta) {
+            const hasta = new Date(fechaHasta);
+            hasta.setHours(23, 59, 59, 999);
+            filtroOrden.fechaEmision.$lte = hasta;
+          }
+        }
+        ordenes = await OrdenPago.find(filtroOrden)
+          .populate('proveedorId', 'nombre razonSocial tipoDoc nroDoc')
+          .sort({ fechaEmision: -1 });
+      }
+
+      const totalFacturas = facturas.reduce((sum, f) => sum + (f.total || 0), 0);
+      const totalOrdenes = ordenes.reduce((sum, o) => sum + (o.montoAPagar || 0), 0);
+      const total = totalFacturas;
 
       res.render("finanzas/cuentas-pagar", {
         titulo: "Cuentas por Pagar - TodoStock S.A.",
         facturas,
+        ordenes,
+        todosLosProveedores,
         total: Math.round(total * 100) / 100,
-        filtros: { fechaDesde, fechaHasta }
+        totalOrdenes: Math.round(totalOrdenes * 100) / 100,
+        filtros: { fechaDesde, fechaHasta, proveedorId, tipoDoc }
       });
     } catch (error) {
       console.error('Error en cuentas por pagar:', error);
@@ -362,7 +432,10 @@ const finanzasController = {
         titulo: "Cuentas por Pagar - TodoStock S.A.",
         error: "Error al cargar cuentas por pagar: " + error.message,
         facturas: [],
+        ordenes: [],
+        todosLosProveedores: [],
         total: 0,
+        totalOrdenes: 0,
         filtros: {}
       });
     }
